@@ -10,15 +10,16 @@ import com.esprit.secondchanceserver.repository.FilterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service("filterService")
 public class FilterServiceImpl implements FilterService {
 
     @Autowired
     private FilterRepository filterRepository;
+
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public Filter findFilterByAppUser(AppUser appUser) {
@@ -30,7 +31,7 @@ public class FilterServiceImpl implements FilterService {
         Filter filter = new Filter();
         filter.setAppUser(appUser);
 
-        if(appUser.getGender() == null || appUser.getGender() == GenderType.Man)
+        if (appUser.getGender() == null || appUser.getGender() == GenderType.Man)
             filter.setGender(GenderType.Woman);
         else
             filter.setGender(GenderType.Man);
@@ -62,8 +63,28 @@ public class FilterServiceImpl implements FilterService {
 
 
         filterRepository.save(filterToUpdate);
-
     }
 
+    @Override
+    public List<AppUser> getFilteredUsers(AppUser appUser) {
+        Filter filter = findFilterByAppUser(appUser);
+        int childrenNumberMin = 0;
+        int childrenNumberMax = 0;
+        if (filter.isHasChildren())
+            childrenNumberMax = 99;
 
+        List<AppUser> filterResult = appUserService.findUsersFor(
+                1,
+                filter.getGender(),
+                filter.getMinAge(), filter.getMaxAge(),
+                childrenNumberMin, childrenNumberMax,
+                filter.getStatusList(),
+                appUser.getId());
+        //Remove element if they don't look for same kind of relationship
+        filterResult.removeIf(currentAppUser -> Collections.disjoint(
+                filter.getRelationshipTypeList(),
+                findFilterByAppUser(currentAppUser).getRelationshipTypeList()));
+
+        return filterResult;
+    }
 }

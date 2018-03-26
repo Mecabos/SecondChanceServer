@@ -2,6 +2,7 @@ package com.esprit.secondchanceserver.service;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import com.esprit.secondchanceserver.enumeration.GenderType;
 import com.esprit.secondchanceserver.enumeration.StatusType;
@@ -36,6 +37,17 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUser findUserById(int id) {
         return appUserRepository.findById(id);
+    }
+
+    @Override
+    public List<AppUser> findUsersFor(int active, GenderType gender, int ageMin, int ageMax, int childrenNumberMin, int childrenNumberMax, List<StatusType> statusList,  int id) {
+        return appUserRepository.findAllByActiveAndGenderAndAgeBetweenAndNumberOfChildrenBetweenAndStatusInAndIdNot(
+                active,
+                gender,
+                ageMin,ageMax,
+                childrenNumberMin,childrenNumberMax,
+                statusList,
+                id);
     }
 
     @Override
