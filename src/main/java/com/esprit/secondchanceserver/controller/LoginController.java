@@ -59,6 +59,17 @@ public class LoginController {
         return modelAndView;
     }
 
+    @RequestMapping(value="/user/home", method = RequestMethod.GET)
+    public ModelAndView UserHome(){
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserService.findUserByEmail(auth.getName());
+        modelAndView.addObject("userName", "Welcome " + appUser.getName() + " " + appUser.getLastName() + " (" + appUser.getEmail() + ")");
+        modelAndView.addObject("user","Successfully logged to the application");
+        modelAndView.setViewName("user/home");
+        return modelAndView;
+    }
+
     @RequestMapping(value="/admin/home", method = RequestMethod.GET)
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();

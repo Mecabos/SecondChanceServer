@@ -5,6 +5,8 @@ import com.esprit.secondchanceserver.enumeration.RelationshipType;
 import com.esprit.secondchanceserver.enumeration.StatusType;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Filter {
@@ -18,25 +20,31 @@ public class Filter {
     private String country;
     private String town;
     private boolean hasChildren;
-    @Enumerated(EnumType.STRING)
-    private StatusType status;
-    @Enumerated(EnumType.STRING)
-    private RelationshipType relationshipType;
+    @ElementCollection(targetClass = StatusType.class)
+    @CollectionTable(name = "app_user_status_type_filter",
+            joinColumns = @JoinColumn(name = "appUser_id"))
+    @Column(name = "status_type_id")
+    protected List<StatusType> statusList;
+    @ElementCollection(targetClass = RelationshipType.class)
+    @CollectionTable(name = "app_user_relationship_type_filter",
+            joinColumns = @JoinColumn(name = "appUser_id"))
+    @Column(name = "relationship_type_id")
+    protected List<RelationshipType> relationshipTypeList;
     @OneToOne
     private AppUser appUser;
 
     public Filter() {
     }
 
-    public Filter(GenderType gender, int minAge, int maxAge, String country, String town, boolean hasChildren, StatusType status, RelationshipType relationshipType, AppUser appUser) {
+    public Filter(GenderType gender, int minAge, int maxAge, String country, String town, boolean hasChildren, List<StatusType> statusList, List<RelationshipType> relationshipTypeList, AppUser appUser) {
         this.gender = gender;
         this.minAge = minAge;
         this.maxAge = maxAge;
         this.country = country;
         this.town = town;
         this.hasChildren = hasChildren;
-        this.status = status;
-        this.relationshipType = relationshipType;
+        this.statusList = statusList;
+        this.relationshipTypeList = relationshipTypeList;
         this.appUser = appUser;
     }
 
@@ -96,20 +104,20 @@ public class Filter {
         this.hasChildren = hasChildren;
     }
 
-    public StatusType getStatus() {
-        return status;
+    public List<StatusType> getStatusList() {
+        return statusList;
     }
 
-    public void setStatus(StatusType status) {
-        this.status = status;
+    public void setStatusList(List<StatusType> statusList) {
+        this.statusList = statusList;
     }
 
-    public RelationshipType getRelationshipType() {
-        return relationshipType;
+    public List<RelationshipType> getRelationshipTypeList() {
+        return relationshipTypeList;
     }
 
-    public void setRelationshipType(RelationshipType relationshipType) {
-        this.relationshipType = relationshipType;
+    public void setRelationshipTypeList(List<RelationshipType> relationshipTypeList) {
+        this.relationshipTypeList = relationshipTypeList;
     }
 
     public AppUser getAppUser() {

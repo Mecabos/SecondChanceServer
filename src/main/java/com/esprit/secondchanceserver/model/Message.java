@@ -16,11 +16,11 @@ public class Message {
     private String text;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime seeingDate;
-    private boolean isSeen;@ManyToOne
+    private boolean isSeen;
+    @ManyToOne
     @JoinColumn(name = "source_user_id")
     @JsonIgnore
     private AppUser sourceUser;
-
     @ManyToOne
     @JoinColumn(name = "target_user_id")
     @JsonIgnore

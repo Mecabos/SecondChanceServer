@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Match {
+public class LikeMatch {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
@@ -22,10 +22,10 @@ public class Match {
     @JsonIgnore
     private AppUser targetUser;
 
-    public Match() {
+    public LikeMatch() {
     }
 
-    public Match(LocalDateTime matchDate, AppUser sourceUser, AppUser targetUser) {
+    public LikeMatch(LocalDateTime matchDate, AppUser sourceUser, AppUser targetUser) {
         this.matchDate = matchDate;
         this.sourceUser = sourceUser;
         this.targetUser = targetUser;

@@ -23,19 +23,19 @@ public class AppUser {
     @Column(name = "appUser_id")
     private int id;
     @Column(name = "email")
-    @Email(message = "*Please provide a valid Email")
-    @NotEmpty(message = "*Please provide an email")
+    /*@Email(message = "*Please provide a valid Email")
+    @NotEmpty(message = "*Please provide an email")*/
     private String email;
     @Column(name = "password")
-    @Length(min = 5, message = "*Your password must have at least 5 characters")
-    @NotEmpty(message = "*Please provide your password")
+    /*@Length(min = 5, message = "*Your password must have at least 5 characters")
+    @NotEmpty(message = "*Please provide your password")*/
     @Transient
     private String password;
     @Column(name = "name")
-    @NotEmpty(message = "*Please provide your name")
+    /*@NotEmpty(message = "*Please provide your name")*/
     private String name;
     @Column(name = "last_name")
-    @NotEmpty(message = "*Please provide your last name")
+    /*@NotEmpty(message = "*Please provide your last name")*/
     private String lastName;
     @Column(name = "active")
     private int active;
@@ -55,7 +55,7 @@ public class AppUser {
     @JoinTable(name = "appUser_role", joinColumns = @JoinColumn(name = "appUser_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
     @OneToMany(mappedBy = "sourceUser")
-    private List<Match> matches = new ArrayList<Match>();
+    private List<LikeMatch> likeMatches = new ArrayList<LikeMatch>();
     @OneToMany(mappedBy = "sourceUser")
     private List<Notation> createdNotations = new ArrayList<Notation>();
     @OneToMany(mappedBy = "targetUser")
@@ -70,7 +70,7 @@ public class AppUser {
     public AppUser() {
     }
 
-    public AppUser(@Email(message = "*Please provide a valid Email") @NotEmpty(message = "*Please provide an email") String email, @Length(min = 5, message = "*Your password must have at least 5 characters") @NotEmpty(message = "*Please provide your password") String password, @NotEmpty(message = "*Please provide your name") String name, @NotEmpty(message = "*Please provide your last name") String lastName, int active, String description, String university, String profession, int numberOfChildren, int age, GenderType gender, StatusType status, String country, String town, boolean livesAlone, Set<Role> roles, List<Match> matches, List<Notation> createdNotations, List<Notation> receivedNotations, List<Message> sentMessages, List<Message> receivedMessages, List<Picture> pictures) {
+    public AppUser(@Email(message = "*Please provide a valid Email") @NotEmpty(message = "*Please provide an email") String email, @Length(min = 5, message = "*Your password must have at least 5 characters") @NotEmpty(message = "*Please provide your password") String password, @NotEmpty(message = "*Please provide your name") String name, @NotEmpty(message = "*Please provide your last name") String lastName, int active, String description, String university, String profession, int numberOfChildren, int age, GenderType gender, StatusType status, String country, String town, boolean livesAlone, Set<Role> roles, List<LikeMatch> likeMatches, List<Notation> createdNotations, List<Notation> receivedNotations, List<Message> sentMessages, List<Message> receivedMessages, List<Picture> pictures) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -87,7 +87,7 @@ public class AppUser {
         this.town = town;
         this.livesAlone = livesAlone;
         this.roles = roles;
-        this.matches = matches;
+        this.likeMatches = likeMatches;
         this.createdNotations = createdNotations;
         this.receivedNotations = receivedNotations;
         this.sentMessages = sentMessages;
@@ -151,12 +151,12 @@ public class AppUser {
         this.roles = roles;
     }
 
-    public List<Match> getMatches() {
-        return matches;
+    public List<LikeMatch> getMatches() {
+        return likeMatches;
     }
 
-    public void setMatches(List<Match> matches) {
-        this.matches = matches;
+    public void setMatches(List<LikeMatch> matches) {
+        this.likeMatches = matches;
     }
 
     public List<Notation> getCreatedNotations() {
