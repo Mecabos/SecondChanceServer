@@ -16,11 +16,9 @@ public class Notation {
     private int value;
     @ManyToOne
     @JoinColumn(name = "source_user_id")
-    @JsonIgnore
     private AppUser sourceUser;
     @ManyToOne
     @JoinColumn(name = "target_user_id")
-    @JsonIgnore
     private AppUser targetUser;
 
     public Notation() {
@@ -71,5 +69,16 @@ public class Notation {
 
     public void setTargetUser(AppUser targetUser) {
         this.targetUser = targetUser;
+    }
+
+    @Override
+    public String toString() {
+        return "Notation{" +
+                "id=" + id +
+                ", notationDate=" + notationDate +
+                ", value=" + value +
+                ", sourceUser=" + sourceUser +
+                ", targetUser=" + targetUser +
+                '}';
     }
 }

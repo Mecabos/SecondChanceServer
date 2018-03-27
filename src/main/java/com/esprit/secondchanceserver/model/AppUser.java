@@ -39,32 +39,32 @@ public class AppUser {
     private String lastName;
     @Column(name = "active")
     private int active;
-    private String description;
-    private String university;
-    private String profession;
+    private String description = "";
+    private String university = "";
+    private String profession = "";
     private int numberOfChildren;
-    private int age;
+    private int age = 20;
     @Enumerated(EnumType.STRING)
-    private GenderType gender;
+    private GenderType gender = GenderType.Man;
     @Enumerated(EnumType.STRING)
     private StatusType status;
-    private String country;
-    private String town;
-    private boolean livesAlone;
+    private String country = "";
+    private String town = "";
+    private boolean livesAlone = true;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "appUser_role", joinColumns = @JoinColumn(name = "appUser_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-    @OneToMany(mappedBy = "sourceUser")
+    @OneToMany(mappedBy = "sourceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<LikeMatch> likeMatches = new ArrayList<LikeMatch>();
-    @OneToMany(mappedBy = "sourceUser")
+    /*@OneToMany(mappedBy = "sourceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Notation> createdNotations = new ArrayList<Notation>();
-    @OneToMany(mappedBy = "targetUser")
-    private List<Notation> receivedNotations = new ArrayList<Notation>();
-    @OneToMany(mappedBy = "sourceUser")
+    @OneToMany(mappedBy = "targetUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Notation> receivedNotations = new ArrayList<Notation>();*/
+    @OneToMany(mappedBy = "sourceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Message> sentMessages = new ArrayList<Message>();
-    @OneToMany(mappedBy = "targetUser")
+    @OneToMany(mappedBy = "targetUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Message> receivedMessages = new ArrayList<Message>();
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Picture> pictures = new ArrayList<Picture>();
 
     public AppUser() {
@@ -88,8 +88,8 @@ public class AppUser {
         this.livesAlone = livesAlone;
         this.roles = roles;
         this.likeMatches = likeMatches;
-        this.createdNotations = createdNotations;
-        this.receivedNotations = receivedNotations;
+        /*this.createdNotations = createdNotations;
+        this.receivedNotations = receivedNotations;*/
         this.sentMessages = sentMessages;
         this.receivedMessages = receivedMessages;
         this.pictures = pictures;
@@ -159,7 +159,7 @@ public class AppUser {
         this.likeMatches = matches;
     }
 
-    public List<Notation> getCreatedNotations() {
+    /*public List<Notation> getCreatedNotations() {
         return createdNotations;
     }
 
@@ -173,7 +173,7 @@ public class AppUser {
 
     public void setReceivedNotations(List<Notation> receivedNotations) {
         this.receivedNotations = receivedNotations;
-    }
+    }*/
 
     public List<Message> getSentMessages() {
         return sentMessages;
@@ -277,5 +277,27 @@ public class AppUser {
 
     public void setLivesAlone(boolean livesAlone) {
         this.livesAlone = livesAlone;
+    }
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", active=" + active +
+                ", description='" + description + '\'' +
+                ", university='" + university + '\'' +
+                ", profession='" + profession + '\'' +
+                ", numberOfChildren=" + numberOfChildren +
+                ", age=" + age +
+                ", gender=" + gender +
+                ", status=" + status +
+                ", country='" + country + '\'' +
+                ", town='" + town + '\'' +
+                ", livesAlone=" + livesAlone +
+                '}';
     }
 }

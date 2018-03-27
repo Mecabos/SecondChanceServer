@@ -12,14 +12,16 @@ import java.util.List;
 
 public interface AppUserRepository extends CrudRepository<AppUser, Integer> {
     AppUser findByEmail(String email);
-    AppUser findById (int id);
-    List<AppUser> findAllByActiveAndGenderAndAgeBetweenAndNumberOfChildrenBetweenAndStatusInAndIdNot(
+
+    AppUser findById(int id);
+
+    List<AppUser> findAllByActiveAndGenderAndAgeBetweenAndNumberOfChildrenBetweenAndStatusInAndCountryAndIdNot(
             int active,
             GenderType gender,
             int ageMin, int ageMax,
             int childrenNumberMin,
             int childrenNumberMax,
             List<StatusType> statusList,
+            String country,
             int id);
-
 }

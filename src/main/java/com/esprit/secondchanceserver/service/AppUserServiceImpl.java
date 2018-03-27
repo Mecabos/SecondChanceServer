@@ -40,13 +40,14 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public List<AppUser> findUsersFor(int active, GenderType gender, int ageMin, int ageMax, int childrenNumberMin, int childrenNumberMax, List<StatusType> statusList,  int id) {
-        return appUserRepository.findAllByActiveAndGenderAndAgeBetweenAndNumberOfChildrenBetweenAndStatusInAndIdNot(
+    public List<AppUser> findUsersFor(int active, GenderType gender, int ageMin, int ageMax, int childrenNumberMin, int childrenNumberMax, List<StatusType> statusList, String country, int id) {
+        return appUserRepository.findAllByActiveAndGenderAndAgeBetweenAndNumberOfChildrenBetweenAndStatusInAndCountryAndIdNot(
                 active,
                 gender,
                 ageMin,ageMax,
                 childrenNumberMin,childrenNumberMax,
                 statusList,
+                country,
                 id);
     }
 

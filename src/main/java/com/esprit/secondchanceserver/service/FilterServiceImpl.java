@@ -6,11 +6,13 @@ import com.esprit.secondchanceserver.enumeration.RelationshipType;
 import com.esprit.secondchanceserver.enumeration.StatusType;
 import com.esprit.secondchanceserver.model.AppUser;
 import com.esprit.secondchanceserver.model.Filter;
+import com.esprit.secondchanceserver.model.Notation;
 import com.esprit.secondchanceserver.repository.FilterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("filterService")
 public class FilterServiceImpl implements FilterService {
@@ -20,6 +22,9 @@ public class FilterServiceImpl implements FilterService {
 
     @Autowired
     private AppUserService appUserService;
+
+    @Autowired
+    private NotationService notationService;
 
     @Override
     public Filter findFilterByAppUser(AppUser appUser) {
@@ -31,13 +36,12 @@ public class FilterServiceImpl implements FilterService {
         Filter filter = new Filter();
         filter.setAppUser(appUser);
 
+        filter.setCountry(appUser.getCountry());
+
         if (appUser.getGender() == null || appUser.getGender() == GenderType.Man)
             filter.setGender(GenderType.Woman);
         else
             filter.setGender(GenderType.Man);
-        filter.setMinAge(18);
-        filter.setMaxAge(100);
-        filter.setHasChildren(true);
 
         List<StatusType> statusList = new ArrayList<>(Arrays.asList(StatusType.values()));
         filter.setStatusList(statusList);
@@ -79,11 +83,21 @@ public class FilterServiceImpl implements FilterService {
                 filter.getMinAge(), filter.getMaxAge(),
                 childrenNumberMin, childrenNumberMax,
                 filter.getStatusList(),
+                filter.getCountry(),
                 appUser.getId());
-        //Remove element if they don't look for same kind of relationship
+        //Remove AppUser From the list if they don't look for same kind of relationship
         filterResult.removeIf(currentAppUser -> Collections.disjoint(
                 filter.getRelationshipTypeList(),
-                findFilterByAppUser(currentAppUser).getRelationshipTypeList()));
+                findFilterByAppUser(currentAppUser).getRelationshipTypeList()) ||
+                !(!filter.isLivesAlone() || currentAppUser.isLivesAlone()));
+
+        //Remove AppUser From the list if it has already been liked
+        filterResult.removeIf(currentAppUser ->
+                notationService.GetNotationListBySourceUser(appUser)
+                        .stream()
+                        .map(Notation::getTargetUser)
+                        .collect(Collectors.toCollection(ArrayList::new))
+                        .contains(currentAppUser));
 
         return filterResult;
     }

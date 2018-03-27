@@ -15,19 +15,20 @@ public class Filter {
     private int id;
     @Enumerated(EnumType.STRING)
     private GenderType gender;
-    private int minAge;
-    private int maxAge;
-    private String country;
-    private String town;
-    private boolean hasChildren;
+    private int minAge = 18;
+    private int maxAge = 100;
+    private String country = "";
+    private String town = "";
+    private boolean hasChildren = true;
+    private boolean livesAlone = true;
     @ElementCollection(targetClass = StatusType.class)
     @CollectionTable(name = "app_user_status_type_filter",
-            joinColumns = @JoinColumn(name = "appUser_id"))
+            joinColumns = @JoinColumn(name = "app_user_filter_id"))
     @Column(name = "status_type_id")
     protected List<StatusType> statusList;
     @ElementCollection(targetClass = RelationshipType.class)
     @CollectionTable(name = "app_user_relationship_type_filter",
-            joinColumns = @JoinColumn(name = "appUser_id"))
+            joinColumns = @JoinColumn(name = "app_user_filter_id"))
     @Column(name = "relationship_type_id")
     protected List<RelationshipType> relationshipTypeList;
     @OneToOne
@@ -36,13 +37,14 @@ public class Filter {
     public Filter() {
     }
 
-    public Filter(GenderType gender, int minAge, int maxAge, String country, String town, boolean hasChildren, List<StatusType> statusList, List<RelationshipType> relationshipTypeList, AppUser appUser) {
+    public Filter(GenderType gender, int minAge, int maxAge, String country, String town, boolean hasChildren, boolean livesAlone, List<StatusType> statusList, List<RelationshipType> relationshipTypeList, AppUser appUser) {
         this.gender = gender;
         this.minAge = minAge;
         this.maxAge = maxAge;
         this.country = country;
         this.town = town;
         this.hasChildren = hasChildren;
+        this.livesAlone = livesAlone;
         this.statusList = statusList;
         this.relationshipTypeList = relationshipTypeList;
         this.appUser = appUser;
@@ -126,5 +128,13 @@ public class Filter {
 
     public void setAppUser(AppUser appUser) {
         this.appUser = appUser;
+    }
+
+    public boolean isLivesAlone() {
+        return livesAlone;
+    }
+
+    public void setLivesAlone(boolean livesAlone) {
+        this.livesAlone = livesAlone;
     }
 }

@@ -1,9 +1,12 @@
 package com.esprit.secondchanceserver.controller;
 
+import com.esprit.secondchanceserver.Util.DebugUtil;
 import com.esprit.secondchanceserver.exceptions.NotFoundException;
 import com.esprit.secondchanceserver.model.AppUser;
+import com.esprit.secondchanceserver.model.Notation;
 import com.esprit.secondchanceserver.service.AppUserService;
 import com.esprit.secondchanceserver.service.FilterService;
+import com.esprit.secondchanceserver.service.NotationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,18 +19,49 @@ import java.util.List;
 public class NotationController {
 
     @Autowired
+    private AppUserService appUserService;
+
+    @Autowired
     private FilterService filterService;
 
     @Autowired
-    private AppUserService appUserService;
+    private NotationService notationService;
+
+    @RequestMapping(method = RequestMethod.POST, value = "/user/notation/getNotation")
+    public Notation getNotation(@RequestBody Notation notation) throws NotFoundException {
+        Notation notationToGet = notationService.findNotationById(notation.getId());
+        if (notationToGet != null) {
+            return notationToGet;
+        } else {
+            throw new NotFoundException("Notation of Id : " + notationToGet.getId() + " Not found");
+        }
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/notation/getFilteredUsers")
-    public List<AppUser> GetFilteredUsers (@RequestBody AppUser appUser) throws NotFoundException {
+    public List<AppUser> GetFilteredUsers(@RequestBody AppUser appUser) throws NotFoundException {
         AppUser appUserForWhomToFilter = appUserService.findUserById(appUser.getId());
-        if (appUserForWhomToFilter != null){
+        if (appUserForWhomToFilter != null) {
             return filterService.getFilteredUsers(appUserForWhomToFilter);
-        }else{
-            throw new NotFoundException("AppUser of Id : "+appUser.getId()+" Not found");
+        } else {
+            throw new NotFoundException("AppUser of Id : " + appUser.getId() + " Not found");
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/user/notation/saveNewNotation")
+    public String SaveNewNotation(@RequestBody Notation notation) throws NotFoundException {
+        DebugUtil.logError(notation.toString());
+        AppUser sourceUser = appUserService.findUserById(notation.getSourceUser().getId());
+        AppUser targetUser = appUserService.findUserById(notation.getTargetUser().getId());
+        if (sourceUser != null && targetUser != null) {
+            notationService.SaveNotation(notation);
+            return "User " + sourceUser.getName() + " liked " + targetUser.getName();
+        } else {
+            String error = "";
+            if (sourceUser == null)
+                error += "AppUser of Id : " + sourceUser.getId() + " Not found ! ";
+            if (targetUser == null)
+                error += "AppUser of Id : " + targetUser.getId() + " Not found ! ";
+            throw new NotFoundException(error);
         }
     }
 }
