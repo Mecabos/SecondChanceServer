@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface NotationRepository extends CrudRepository<Notation, Integer> {
     Notation findById (int id);
-    Notation findAllBySourceUserAndTargetUser(AppUser sourceUser, AppUser targetUser);
+    Notation findBySourceUserAndTargetUser(AppUser sourceUser, AppUser targetUser);
     List<Notation> findAllBySourceUser(AppUser sourceUser);
 }

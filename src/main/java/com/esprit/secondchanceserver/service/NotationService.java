@@ -9,8 +9,8 @@ import java.util.List;
 public interface NotationService {
 
     Notation findNotationById(int id);
-    void SaveNotation(Notation newNotation);
-    List<Notation> GetNotationListBySourceUser (AppUser sourceUser);
+    void saveNotation(Notation newNotation);
+    List<Notation> getNotationListBySourceUser (AppUser sourceUser);
 
 
 }

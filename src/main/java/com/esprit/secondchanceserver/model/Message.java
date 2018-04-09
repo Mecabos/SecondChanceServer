@@ -13,18 +13,19 @@ public class Message {
     private int id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime sendingDate;
-    private String text;
+    private String text = "";
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime seeingDate;
-    private boolean isSeen;
+    private LocalDateTime seeingDate = null;
+    private boolean isSeen = false;
     @ManyToOne
     @JoinColumn(name = "source_user_id")
-    @JsonIgnore
     private AppUser sourceUser;
     @ManyToOne
     @JoinColumn(name = "target_user_id")
-    @JsonIgnore
     private AppUser targetUser;
+
+    @Transient
+    private boolean isSender ;
 
     public Message() {
     }
@@ -90,5 +91,13 @@ public class Message {
 
     public void setTargetUser(AppUser targetUser) {
         this.targetUser = targetUser;
+    }
+
+    public boolean isSender() {
+        return isSender;
+    }
+
+    public void setSender(boolean sender) {
+        isSender = sender;
     }
 }

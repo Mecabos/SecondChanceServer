@@ -54,16 +54,16 @@ public class AppUser {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "appUser_role", joinColumns = @JoinColumn(name = "appUser_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-    @OneToMany(mappedBy = "sourceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<LikeMatch> likeMatches = new ArrayList<LikeMatch>();
+    /*@OneToMany(mappedBy = "sourceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<LikeMatch> likeMatches = new ArrayList<LikeMatch>();*/
     /*@OneToMany(mappedBy = "sourceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Notation> createdNotations = new ArrayList<Notation>();
     @OneToMany(mappedBy = "targetUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Notation> receivedNotations = new ArrayList<Notation>();*/
-    @OneToMany(mappedBy = "sourceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    /*@OneToMany(mappedBy = "sourceUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Message> sentMessages = new ArrayList<Message>();
     @OneToMany(mappedBy = "targetUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Message> receivedMessages = new ArrayList<Message>();
+    private List<Message> receivedMessages = new ArrayList<Message>();*/
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Picture> pictures = new ArrayList<Picture>();
 
@@ -87,11 +87,11 @@ public class AppUser {
         this.town = town;
         this.livesAlone = livesAlone;
         this.roles = roles;
-        this.likeMatches = likeMatches;
+        /*this.likeMatches = likeMatches;*/
         /*this.createdNotations = createdNotations;
         this.receivedNotations = receivedNotations;*/
-        this.sentMessages = sentMessages;
-        this.receivedMessages = receivedMessages;
+        /*this.sentMessages = sentMessages;
+        this.receivedMessages = receivedMessages;*/
         this.pictures = pictures;
     }
 
@@ -151,13 +151,13 @@ public class AppUser {
         this.roles = roles;
     }
 
-    public List<LikeMatch> getMatches() {
+    /*public List<LikeMatch> getMatches() {
         return likeMatches;
     }
 
     public void setMatches(List<LikeMatch> matches) {
         this.likeMatches = matches;
-    }
+    }*/
 
     /*public List<Notation> getCreatedNotations() {
         return createdNotations;
@@ -175,7 +175,7 @@ public class AppUser {
         this.receivedNotations = receivedNotations;
     }*/
 
-    public List<Message> getSentMessages() {
+    /*public List<Message> getSentMessages() {
         return sentMessages;
     }
 
@@ -189,7 +189,7 @@ public class AppUser {
 
     public void setReceivedMessages(List<Message> receivedMessages) {
         this.receivedMessages = receivedMessages;
-    }
+    }*/
 
     public List<Picture> getPictures() {
         return pictures;

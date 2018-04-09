@@ -38,7 +38,7 @@ public class NotationController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/notation/getFilteredUsers")
-    public List<AppUser> GetFilteredUsers(@RequestBody AppUser appUser) throws NotFoundException {
+    public List<AppUser> getFilteredUsers(@RequestBody AppUser appUser) throws NotFoundException {
         AppUser appUserForWhomToFilter = appUserService.findUserById(appUser.getId());
         if (appUserForWhomToFilter != null) {
             return filterService.getFilteredUsers(appUserForWhomToFilter);
@@ -48,19 +48,18 @@ public class NotationController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/notation/saveNewNotation")
-    public String SaveNewNotation(@RequestBody Notation notation) throws NotFoundException {
-        DebugUtil.logError(notation.toString());
+    public String saveNewNotation(@RequestBody Notation notation) throws NotFoundException {
         AppUser sourceUser = appUserService.findUserById(notation.getSourceUser().getId());
         AppUser targetUser = appUserService.findUserById(notation.getTargetUser().getId());
         if (sourceUser != null && targetUser != null) {
-            notationService.SaveNotation(notation);
+            notationService.saveNotation(notation);
             return "User " + sourceUser.getName() + " liked " + targetUser.getName();
         } else {
             String error = "";
             if (sourceUser == null)
-                error += "AppUser of Id : " + sourceUser.getId() + " Not found ! ";
+                error += "AppUser of Id : " + notation.getSourceUser().getId() + " Not found ! ";
             if (targetUser == null)
-                error += "AppUser of Id : " + targetUser.getId() + " Not found ! ";
+                error += "AppUser of Id : " + notation.getTargetUser().getId() + " Not found ! ";
             throw new NotFoundException(error);
         }
     }

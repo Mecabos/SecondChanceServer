@@ -93,7 +93,7 @@ public class FilterServiceImpl implements FilterService {
 
         //Remove AppUser From the list if it has already been liked
         filterResult.removeIf(currentAppUser ->
-                notationService.GetNotationListBySourceUser(appUser)
+                notationService.getNotationListBySourceUser(appUser)
                         .stream()
                         .map(Notation::getTargetUser)
                         .collect(Collectors.toCollection(ArrayList::new))

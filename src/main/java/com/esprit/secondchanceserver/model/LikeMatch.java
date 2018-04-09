@@ -15,11 +15,9 @@ public class LikeMatch {
     private LocalDateTime matchDate;
     @ManyToOne
     @JoinColumn(name = "source_user_id")
-    @JsonIgnore
     private AppUser sourceUser;
     @ManyToOne
     @JoinColumn(name = "target_user_id")
-    @JsonIgnore
     private AppUser targetUser;
 
     public LikeMatch() {
