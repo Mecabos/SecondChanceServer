@@ -50,7 +50,7 @@ public class LikeMatchController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/user/likeMatch/getLikeMatchListResume")
+    @RequestMapping(method = RequestMethod.POST, value = "/user/likeMatch/getLikeMatchResumeList")
     public List<LikeMatchResume> getLikeMatchListResume (@RequestBody AppUser appUser) throws NotFoundException {
         AppUser appUserToWhomToSearchMatchedResumeList = appUserService.findUserById(appUser.getId());
         if (appUserToWhomToSearchMatchedResumeList != null){

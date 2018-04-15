@@ -18,8 +18,8 @@ public interface MessageRepository extends CrudRepository<Message, Integer> {
 
     int countBySourceUserAndTargetUserAndIsSeenIsFalse (AppUser sourceAppUser, AppUser targeAppUser);
 
-    @Query("select m.text from Message m where m.sendingDate = (select max(mm.sendingDate) from Message mm where (mm.sourceUser = ?1 and mm.targetUser = ?2) or (mm.sourceUser = ?2 and mm.targetUser = ?1)) and ((m.sourceUser = ?1 and m.targetUser = ?2) or (m.sourceUser = ?2 and m.targetUser = ?1)) ")
-    String getLastMessage(AppUser sourceAppUser, AppUser targeAppUser);
+    @Query("select m from Message m where m.sendingDate = (select max(mm.sendingDate) from Message mm where (mm.sourceUser = ?1 and mm.targetUser = ?2) or (mm.sourceUser = ?2 and mm.targetUser = ?1)) and ((m.sourceUser = ?1 and m.targetUser = ?2) or (m.sourceUser = ?2 and m.targetUser = ?1)) ")
+    Message getLastMessage(AppUser sourceAppUser, AppUser targeAppUser);
 
 
 }

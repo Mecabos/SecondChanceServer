@@ -4,6 +4,7 @@ import com.esprit.secondchanceserver.Util.DateUtil;
 import com.esprit.secondchanceserver.custom.LikeMatchResume;
 import com.esprit.secondchanceserver.model.AppUser;
 import com.esprit.secondchanceserver.model.LikeMatch;
+import com.esprit.secondchanceserver.model.Message;
 import com.esprit.secondchanceserver.model.Notation;
 import com.esprit.secondchanceserver.repository.LikeMatchRepository;
 import com.esprit.secondchanceserver.repository.MessageRepository;
@@ -60,7 +61,11 @@ public class LikeMatchServiceImpl implements LikeMatchService {
             newResume.setId(matchedAppUser.getId());
             newResume.setName(matchedAppUser.getName());
             newResume.setNbrUnseenMessages(messageRepository.countBySourceUserAndTargetUserAndIsSeenIsFalse(matchedAppUser,sourceAppUser));
-            newResume.setLastMessage(messageRepository.getLastMessage(sourceAppUser,matchedAppUser));
+            Message lastMessage = messageRepository.getLastMessage(sourceAppUser,matchedAppUser);
+            if (lastMessage != null){
+                newResume.setLastMessage(lastMessage.getText());
+                newResume.setLastMessageSender(lastMessage.getSourceUser() == sourceAppUser);
+            }
 
             likeMatchResumeList.add(newResume);
         }

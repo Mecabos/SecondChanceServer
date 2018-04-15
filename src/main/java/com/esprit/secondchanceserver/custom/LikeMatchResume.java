@@ -5,6 +5,7 @@ public class LikeMatchResume {
     private int id ;
     private String name;
     private String lastMessage;
+    private boolean lastMessageSender = false;
     private int nbrUnseenMessages;
 
     public LikeMatchResume() {
@@ -40,5 +41,13 @@ public class LikeMatchResume {
 
     public void setNbrUnseenMessages(int nbrUnseenMessages) {
         this.nbrUnseenMessages = nbrUnseenMessages;
+    }
+
+    public boolean isLastMessageSender() {
+        return lastMessageSender;
+    }
+
+    public void setLastMessageSender(boolean lastMessageSender) {
+        this.lastMessageSender = lastMessageSender;
     }
 }
