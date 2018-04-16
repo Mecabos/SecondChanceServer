@@ -7,9 +7,10 @@ import com.esprit.secondchanceserver.model.AppUser;
 import java.util.List;
 
 public interface AppUserService {
+    AppUser login(AppUser appUser);
     AppUser findUserByEmail(String email);
     AppUser findUserById(int id);
     List<AppUser> findUsersFor(int active, GenderType gender, int ageMin, int ageMax, int childrenNumberMin, int childrenNumberMax, List<StatusType> statusList, String country, int id);
-    void saveUser(AppUser user);
+    AppUser saveUser(AppUser user);
     void updateInfo(AppUser user);
 }

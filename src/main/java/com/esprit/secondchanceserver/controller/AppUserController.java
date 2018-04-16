@@ -1,5 +1,8 @@
 package com.esprit.secondchanceserver.controller;
 
+import com.esprit.secondchanceserver.Util.DebugUtil;
+import com.esprit.secondchanceserver.exceptions.AlreadyExistsException;
+import com.esprit.secondchanceserver.exceptions.BadParametersException;
 import com.esprit.secondchanceserver.exceptions.NotFoundException;
 import com.esprit.secondchanceserver.model.AppUser;
 import com.esprit.secondchanceserver.model.Filter;
@@ -18,6 +21,26 @@ public class AppUserController {
 
     @Autowired
     private FilterService filterService;
+
+    @RequestMapping(value="/user/register", method = RequestMethod.POST)
+    public AppUser register(@RequestBody AppUser appUser) throws AlreadyExistsException, BadParametersException {
+        if (appUser.getEmail().equals(""))
+            throw new BadParametersException("Email can't be empty!");
+        AppUser userExists = appUserService.findUserByEmail(appUser.getEmail());
+        if (userExists != null)
+            throw new AlreadyExistsException("User with the email " + userExists.getEmail() + " already exists");
+        DebugUtil.log("test = " + appUser.getEmail());
+        return appUserService.saveUser(appUser);
+    }
+
+    @RequestMapping(value="/user/login", method = RequestMethod.POST)
+    public AppUser loginUser(@RequestBody AppUser appUser) throws NotFoundException {
+        AppUser loggedAppUser = appUserService.login(appUser);
+        if (loggedAppUser != null)
+            return loggedAppUser;
+        else
+            throw new NotFoundException("Wrong email or password");
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/appUser/getUser")
     public AppUser getUser (@RequestBody AppUser appUser) throws NotFoundException{

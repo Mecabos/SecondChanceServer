@@ -3,6 +3,10 @@ package com.esprit.secondchanceserver.controller;
 
 import javax.validation.Valid;
 
+import com.esprit.secondchanceserver.Util.DebugUtil;
+import com.esprit.secondchanceserver.exceptions.AlreadyExistsException;
+import com.esprit.secondchanceserver.exceptions.BadParametersException;
+import com.esprit.secondchanceserver.exceptions.NotFoundException;
 import com.esprit.secondchanceserver.model.AppUser;
 import com.esprit.secondchanceserver.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,6 +25,7 @@ public class LoginController {
 
     @Autowired
     private AppUserService appUserService;
+
 
     @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){

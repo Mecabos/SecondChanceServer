@@ -30,6 +30,17 @@ public class AppUserServiceImpl implements AppUserService {
     private FilterService filterService;
 
     @Override
+    public AppUser login(AppUser appUser) {
+        AppUser foundAppUser = appUserRepository.findByEmail(appUser.getEmail());
+        if (foundAppUser != null){
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            if (passwordEncoder.matches(appUser.getPassword(), foundAppUser.getPassword()))
+                return foundAppUser;
+        }
+        return null;
+    }
+
+    @Override
     public AppUser findUserByEmail(String email) {
         return appUserRepository.findByEmail(email);
     }
@@ -52,14 +63,16 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public void saveUser(AppUser appUser) {
+    public AppUser saveUser(AppUser appUser) {
         appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
         appUser.setActive(1);
         Role userRole = roleRepository.findByRole("USER");
         appUser.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 
-        appUserRepository.save(appUser);
+        AppUser registeredUser =  appUserRepository.save(appUser);
         filterService.saveFilter(appUser);
+
+        return registeredUser;
     }
 
     @Override
