@@ -45,4 +45,12 @@ public class MessageServiceImpl implements MessageService {
         messageToMarkAsSeen.setSeeingDate(DateUtil.getCurrentDateTime());
         messageRepository.save(messageToMarkAsSeen);
     }
+
+    @Override
+    public void seeMessages(Message messageToGetSourceAndTargetFrom) {
+        List<Message> messageListToSee = messageRepository.findBySourceUserAndTargetUser(messageToGetSourceAndTargetFrom.getSourceUser(),messageToGetSourceAndTargetFrom.getTargetUser());
+        for (Message message : messageListToSee){
+            markMessageAsSeen(message);
+        }
+    }
 }

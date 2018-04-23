@@ -64,8 +64,8 @@ public class AppUser {
     private List<Message> sentMessages = new ArrayList<Message>();
     @OneToMany(mappedBy = "targetUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Message> receivedMessages = new ArrayList<Message>();*/
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Picture> pictures = new ArrayList<Picture>();
+    /*@OneToMany(mappedBy = "appUser", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Picture> pictures = new ArrayList<Picture>();*/
 
     public AppUser() {
     }
@@ -92,7 +92,7 @@ public class AppUser {
         this.receivedNotations = receivedNotations;*/
         /*this.sentMessages = sentMessages;
         this.receivedMessages = receivedMessages;*/
-        this.pictures = pictures;
+        /*this.pictures = pictures;*/
     }
 
     public int getId() {
@@ -191,13 +191,13 @@ public class AppUser {
         this.receivedMessages = receivedMessages;
     }*/
 
-    public List<Picture> getPictures() {
+    /*public List<Picture> getPictures() {
         return pictures;
     }
 
     public void setPictures(List<Picture> pictures) {
         this.pictures = pictures;
-    }
+    }*/
 
     public String getDescription() {
         return description;

@@ -11,4 +11,5 @@ public interface MessageService {
     Message findMessageById(int id);
     List<Message> getMessageList (Message messageToGetSourceAndTargetFrom);
     void markMessageAsSeen (Message messageToMarkAsSeen);
+    void seeMessages(Message messageToGetSourceAndTargetFrom);
 }

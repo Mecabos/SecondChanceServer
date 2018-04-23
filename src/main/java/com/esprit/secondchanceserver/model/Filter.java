@@ -20,7 +20,7 @@ public class Filter {
     private String country = "";
     private String town = "";
     private boolean hasChildren = true;
-    private boolean livesAlone = true;
+    private boolean livesAlone = false;
     @ElementCollection(targetClass = StatusType.class)
     @CollectionTable(name = "app_user_status_type_filter",
             joinColumns = @JoinColumn(name = "app_user_filter_id"))

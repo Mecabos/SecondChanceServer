@@ -13,6 +13,8 @@ public interface MessageRepository extends CrudRepository<Message, Integer> {
 
     Message findById(int id);
 
+    List<Message> findBySourceUserAndTargetUser(AppUser sourceAppUser, AppUser targetAppUser);
+
     @Query("select m from Message m where (m.sourceUser = ?1 and m.targetUser = ?2) or ( m.sourceUser = ?2 and m.targetUser = ?1) order by m.sendingDate")
     List<Message> getAppUserMessageList (AppUser sourceAppUser, AppUser targetAppUser);
 

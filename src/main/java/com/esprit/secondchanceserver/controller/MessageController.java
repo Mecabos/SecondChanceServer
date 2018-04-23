@@ -50,6 +50,23 @@ public class MessageController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/user/message/markMessageListAsSeen")
+    public String markMessageListAsSeen(@RequestBody Message messageToGetSourceAndTargetFrom) throws NotFoundException {
+        AppUser sourceUser = appUserService.findUserById(messageToGetSourceAndTargetFrom.getSourceUser().getId());
+        AppUser targetUser = appUserService.findUserById(messageToGetSourceAndTargetFrom.getTargetUser().getId());
+        if (sourceUser != null && targetUser != null) {
+            messageService.seeMessages(messageToGetSourceAndTargetFrom);
+            return targetUser.getName() + " saw " + sourceUser.getName() + "'s messages";
+        } else {
+            String error = "";
+            if (sourceUser == null)
+                error += "AppUser of Id : " + messageToGetSourceAndTargetFrom.getSourceUser().getId() + " Not found ! ";
+            if (targetUser == null)
+                error += "AppUser of Id : " + messageToGetSourceAndTargetFrom.getTargetUser().getId() + " Not found ! ";
+            throw new NotFoundException(error);
+        }
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/user/message/getMessageList")
     public List<Message> getMessageList(@RequestBody Message messageToGetSourceAndTargetFrom) throws NotFoundException {
         AppUser sourceUser = appUserService.findUserById(messageToGetSourceAndTargetFrom.getSourceUser().getId());

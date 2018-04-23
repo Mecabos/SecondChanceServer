@@ -64,6 +64,7 @@ public class FilterServiceImpl implements FilterService {
         filterToUpdate.setHasChildren(filter.isHasChildren());
         filterToUpdate.setStatusList(filter.getStatusList());
         filterToUpdate.setRelationshipTypeList(filter.getRelationshipTypeList());
+        filterToUpdate.setLivesAlone(filter.isLivesAlone());
 
 
         filterRepository.save(filterToUpdate);

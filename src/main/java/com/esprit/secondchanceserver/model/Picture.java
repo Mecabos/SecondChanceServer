@@ -17,17 +17,19 @@ public class Picture {
     private int position;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private AppUser user;
+    private AppUser appUser;
+
+    @Transient
+    private String link ;
 
     public Picture() {
     }
 
-    public Picture(LocalDateTime uploadDate, String name, int position, AppUser user) {
+    public Picture(LocalDateTime uploadDate, String name, int position, AppUser appUser) {
         this.uploadDate = uploadDate;
         this.name = name;
         this.position = position;
-        this.user = user;
+        this.appUser = appUser;
     }
 
     public int getId() {
@@ -62,11 +64,19 @@ public class Picture {
         this.position = position;
     }
 
-    public AppUser getUser() {
-        return user;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
-    public void setUser(AppUser user) {
-        this.user = user;
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }
