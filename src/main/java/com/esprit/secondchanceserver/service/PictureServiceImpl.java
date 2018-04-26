@@ -19,19 +19,24 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public void saveNewPicture(Picture newPicture) {
-        Picture oldPicture = pictureRepository.findFirstByAppUserAndPosition(newPicture.getAppUser(),newPicture.getPosition());
-        if (oldPicture != null)
-            deletePicture(oldPicture);
+        if (newPicture.getPosition() == 0){
+            Picture oldPicture = pictureRepository.findFirstByAppUserAndPosition(newPicture.getAppUser(),0);
+            if (oldPicture != null)
+                deletePicture(oldPicture);
+        }else{
+            int newPicturePosition = pictureRepository.getLastPicturePosition(newPicture.getAppUser()) + 1;
+            newPicture.setPosition(newPicturePosition);
+        }
+
         pictureRepository.save(newPicture);
 
     }
 
     @Override
     public List<Picture> getPictureList(Picture pictureToGetUserFrom) {
-        List<Picture> pictureList = pictureRepository.findByAppUser(pictureToGetUserFrom.getAppUser());
+        List<Picture> pictureList = pictureRepository.findByAppUserAndPositionNot(pictureToGetUserFrom.getAppUser(),0);
         for (Picture picture : pictureList){
             picture.setLink(FileUtil.DOWNLOAD_URL+picture.getName());
-            picture.setAppUser(null);
         }
         pictureList.sort(Comparator.comparing(Picture::getPosition));
         return pictureList;
@@ -39,7 +44,8 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public void deletePicture(Picture pictureToDelete) {
-        FileUtil.deleteFile(pictureToDelete.getName());
+        Picture actualPictureToDelete = pictureRepository.findFirstByAppUserAndPosition(pictureToDelete.getAppUser(),pictureToDelete.getPosition());
+        FileUtil.deleteFile(actualPictureToDelete.getName());
         pictureRepository.delete(pictureToDelete);
     }
 

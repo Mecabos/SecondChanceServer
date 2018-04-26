@@ -1,19 +1,16 @@
 package com.esprit.secondchanceserver.controller;
 
 import com.esprit.secondchanceserver.Util.DebugUtil;
-import com.esprit.secondchanceserver.custom.UserWithProfilePicture;
 import com.esprit.secondchanceserver.exceptions.AlreadyExistsException;
 import com.esprit.secondchanceserver.exceptions.BadParametersException;
 import com.esprit.secondchanceserver.exceptions.NotFoundException;
 import com.esprit.secondchanceserver.model.AppUser;
 import com.esprit.secondchanceserver.model.Filter;
 import com.esprit.secondchanceserver.model.Picture;
-import com.esprit.secondchanceserver.repository.FilterRepository;
 import com.esprit.secondchanceserver.service.AppUserService;
 import com.esprit.secondchanceserver.service.FilterService;
 import com.esprit.secondchanceserver.service.PictureService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,17 +37,10 @@ public class AppUserController {
     }
 
     @RequestMapping(value="/user/login", method = RequestMethod.POST)
-    public UserWithProfilePicture loginUser(@RequestBody AppUser appUser) throws NotFoundException {
+    public AppUser loginUser(@RequestBody AppUser appUser) throws NotFoundException {
         AppUser loggedAppUser = appUserService.login(appUser);
         if (loggedAppUser != null){
-            Picture profilePicture = new Picture();
-            profilePicture.setAppUser(loggedAppUser);
-            profilePicture.setPosition(0);
-            Picture actualProfilePicture = pictureService.getPicture(profilePicture);
-            if (actualProfilePicture != null)
-                actualProfilePicture.setAppUser(null);
-            UserWithProfilePicture userWithProfilePicture = new UserWithProfilePicture(loggedAppUser,actualProfilePicture);
-            return userWithProfilePicture;
+            return loggedAppUser;
         }
         else
             throw new NotFoundException("Wrong email or password");

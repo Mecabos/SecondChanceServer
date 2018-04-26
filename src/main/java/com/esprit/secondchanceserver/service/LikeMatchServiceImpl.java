@@ -1,11 +1,9 @@
 package com.esprit.secondchanceserver.service;
 
 import com.esprit.secondchanceserver.Util.DateUtil;
+import com.esprit.secondchanceserver.Util.DebugUtil;
 import com.esprit.secondchanceserver.custom.LikeMatchResume;
-import com.esprit.secondchanceserver.model.AppUser;
-import com.esprit.secondchanceserver.model.LikeMatch;
-import com.esprit.secondchanceserver.model.Message;
-import com.esprit.secondchanceserver.model.Notation;
+import com.esprit.secondchanceserver.model.*;
 import com.esprit.secondchanceserver.repository.LikeMatchRepository;
 import com.esprit.secondchanceserver.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,9 @@ public class LikeMatchServiceImpl implements LikeMatchService {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Autowired
+    private PictureService pictureService;
+
     @Override
     public void saveLikeMatch(AppUser sourceAppUser, AppUser targetAppUser) {
         LikeMatch newLikeMatch = new LikeMatch(DateUtil.getCurrentDateTime(), sourceAppUser, targetAppUser);
@@ -39,9 +40,13 @@ public class LikeMatchServiceImpl implements LikeMatchService {
 
     @Override
     public List<AppUser> getMatchedAppUserListFor(AppUser sourceAppUser) {
-        return getLikeMatchListBySourceUser(sourceAppUser).stream()
+        List<AppUser> matchedAppUserList = getLikeMatchListBySourceUser(sourceAppUser).stream()
                 .map(LikeMatch::getTargetUser)
                 .collect(Collectors.toCollection(ArrayList::new));
+        for (AppUser appUser : matchedAppUserList){
+            appUser.setProfilePicture(pictureService.getPicture(new Picture(0,appUser)));
+        }
+        return matchedAppUserList;
     }
 
     @Override
@@ -61,6 +66,7 @@ public class LikeMatchServiceImpl implements LikeMatchService {
             newResume.setId(matchedAppUser.getId());
             newResume.setName(matchedAppUser.getName());
             newResume.setNbrUnseenMessages(messageRepository.countBySourceUserAndTargetUserAndIsSeenIsFalse(matchedAppUser,sourceAppUser));
+            newResume.setProfilePicture(pictureService.getPicture(new Picture(0,matchedAppUser)));
             Message lastMessage = messageRepository.getLastMessage(sourceAppUser,matchedAppUser);
             if (lastMessage != null){
                 newResume.setLastMessage(lastMessage.getText());

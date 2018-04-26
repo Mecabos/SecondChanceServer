@@ -1,5 +1,7 @@
 package com.esprit.secondchanceserver.custom;
 
+import com.esprit.secondchanceserver.model.Picture;
+
 public class LikeMatchResume {
 
     private int id ;
@@ -7,6 +9,7 @@ public class LikeMatchResume {
     private String lastMessage;
     private boolean lastMessageSender = false;
     private int nbrUnseenMessages;
+    private Picture profilePicture;
 
     public LikeMatchResume() {
     }
@@ -49,5 +52,13 @@ public class LikeMatchResume {
 
     public void setLastMessageSender(boolean lastMessageSender) {
         this.lastMessageSender = lastMessageSender;
+    }
+
+    public Picture getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(Picture profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

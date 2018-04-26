@@ -7,6 +7,7 @@ import com.esprit.secondchanceserver.enumeration.StatusType;
 import com.esprit.secondchanceserver.model.AppUser;
 import com.esprit.secondchanceserver.model.Filter;
 import com.esprit.secondchanceserver.model.Notation;
+import com.esprit.secondchanceserver.model.Picture;
 import com.esprit.secondchanceserver.repository.FilterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,10 @@ public class FilterServiceImpl implements FilterService {
 
     @Autowired
     private NotationService notationService;
+
+    @Autowired
+    private PictureService pictureService;
+
 
     @Override
     public Filter findFilterByAppUser(AppUser appUser) {
@@ -99,6 +104,10 @@ public class FilterServiceImpl implements FilterService {
                         .map(Notation::getTargetUser)
                         .collect(Collectors.toCollection(ArrayList::new))
                         .contains(currentAppUser));
+
+        for (AppUser currentAppUser : filterResult){
+            currentAppUser.setProfilePicture(pictureService.getPicture(new Picture(0,currentAppUser)));
+        }
 
         return filterResult;
     }

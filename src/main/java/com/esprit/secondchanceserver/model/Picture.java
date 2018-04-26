@@ -17,6 +17,7 @@ public class Picture {
     private int position;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private AppUser appUser;
 
     @Transient
@@ -28,6 +29,11 @@ public class Picture {
     public Picture(LocalDateTime uploadDate, String name, int position, AppUser appUser) {
         this.uploadDate = uploadDate;
         this.name = name;
+        this.position = position;
+        this.appUser = appUser;
+    }
+
+    public Picture(int position, AppUser appUser) {
         this.position = position;
         this.appUser = appUser;
     }

@@ -4,16 +4,17 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import com.esprit.secondchanceserver.Util.DebugUtil;
 import com.esprit.secondchanceserver.enumeration.GenderType;
 import com.esprit.secondchanceserver.enumeration.StatusType;
 import com.esprit.secondchanceserver.model.AppUser;
+import com.esprit.secondchanceserver.model.Picture;
 import com.esprit.secondchanceserver.model.Role;
 import com.esprit.secondchanceserver.repository.AppUserRepository;
 import com.esprit.secondchanceserver.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 
 @Service("appUserService")
@@ -29,25 +30,35 @@ public class AppUserServiceImpl implements AppUserService {
     @Autowired
     private FilterService filterService;
 
+    @Autowired
+    private PictureService pictureService;
+
     @Override
     public AppUser login(AppUser appUser) {
         AppUser foundAppUser = appUserRepository.findByEmail(appUser.getEmail());
-        if (foundAppUser != null){
+        if (foundAppUser != null) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            if (passwordEncoder.matches(appUser.getPassword(), foundAppUser.getPassword()))
+            if (passwordEncoder.matches(appUser.getPassword(), foundAppUser.getPassword())){
+                foundAppUser.setProfilePicture(pictureService.getPicture(new Picture(0,foundAppUser)));
                 return foundAppUser;
+            }
+
         }
         return null;
     }
 
     @Override
     public AppUser findUserByEmail(String email) {
-        return appUserRepository.findByEmail(email);
+        AppUser foundAppUser = appUserRepository.findByEmail(email);
+        foundAppUser.setProfilePicture(pictureService.getPicture(new Picture(0,foundAppUser)));
+        return foundAppUser;
     }
 
     @Override
     public AppUser findUserById(int id) {
-        return appUserRepository.findById(id);
+        AppUser foundAppUser = appUserRepository.findById(id);
+        foundAppUser.setProfilePicture(pictureService.getPicture(new Picture(0,foundAppUser)));
+        return foundAppUser;
     }
 
     @Override
@@ -55,8 +66,8 @@ public class AppUserServiceImpl implements AppUserService {
         return appUserRepository.findAllByActiveAndGenderAndAgeBetweenAndNumberOfChildrenBetweenAndStatusInAndCountryAndIdNot(
                 active,
                 gender,
-                ageMin,ageMax,
-                childrenNumberMin,childrenNumberMax,
+                ageMin, ageMax,
+                childrenNumberMin, childrenNumberMax,
                 statusList,
                 country,
                 id);
@@ -69,7 +80,7 @@ public class AppUserServiceImpl implements AppUserService {
         Role userRole = roleRepository.findByRole("USER");
         appUser.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 
-        AppUser registeredUser =  appUserRepository.save(appUser);
+        AppUser registeredUser = appUserRepository.save(appUser);
         filterService.saveFilter(appUser);
 
         return registeredUser;

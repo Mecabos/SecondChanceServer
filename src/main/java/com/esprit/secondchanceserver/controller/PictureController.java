@@ -88,35 +88,35 @@ public class PictureController {
         return requestResult;
     }*/
 
-    @RequestMapping(method = RequestMethod.POST, value = "/user/picture/getPictureList")
-    public List<Picture> getPictureList(@RequestBody Picture pictureToGetUserFrom) throws NotFoundException {
-        AppUser appUser = appUserService.findUserById(pictureToGetUserFrom.getAppUser().getId());
+    @RequestMapping(method = RequestMethod.POST, value = "/user/picture/getPictureList/{id}")
+    public List<Picture> getPictureList(@PathVariable int id) throws NotFoundException {
+        AppUser appUser = appUserService.findUserById(id);
         if (appUser != null) {
-            return pictureService.getPictureList(pictureToGetUserFrom);
+            return pictureService.getPictureList(new Picture(1,appUser));
         } else {
             String error = "";
-            error += "AppUser of Id : " + pictureToGetUserFrom.getAppUser().getId() + " Not found ! ";
+            error += "AppUser of Id : " + id + " Not found ! ";
            throw new NotFoundException(error);
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/user/picture/delete")
-    public RequestResult deletePicture(@RequestBody Picture pictureToDelete) throws NotFoundException {
+    @RequestMapping(method = RequestMethod.POST, value = "/user/picture/delete/{position}/{id}")
+    public RequestResult deletePicture(@PathVariable int position, @PathVariable int id) throws NotFoundException {
         RequestResult requestResult = new RequestResult();
-        AppUser appUser = appUserService.findUserById(pictureToDelete.getAppUser().getId());
+        AppUser appUser = appUserService.findUserById(id);
         if (appUser != null) {
-            Picture existingPicture = pictureService.getPicture(pictureToDelete);
+            Picture existingPicture = pictureService.getPicture(new Picture(position,appUser));
             if (existingPicture != null){
                 pictureService.deletePicture(existingPicture);
-                requestResult.result = "Successfully deleted picture at position " + pictureToDelete.getPosition()+" For user with id " + pictureToDelete.getAppUser().getId();
+                requestResult.result = "Successfully deleted picture at position " +position+" For user with id " + id;
             }else{
                 requestResult.success = false;
-                requestResult.errors = "No picture found at position " + pictureToDelete.getPosition() +" For user with id " + pictureToDelete.getAppUser().getId();
+                requestResult.errors = "No picture found at position " + position +" For user with id " + id;
             }
 
         } else {
             String error = "";
-            error += "AppUser of Id : " + pictureToDelete.getAppUser().getId() + " Not found ! ";
+            error += "AppUser of Id : " + id + " Not found ! ";
             throw new NotFoundException(error);
         }
         return requestResult;
