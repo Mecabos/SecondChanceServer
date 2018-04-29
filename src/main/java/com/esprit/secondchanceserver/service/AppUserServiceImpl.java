@@ -50,14 +50,16 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUser findUserByEmail(String email) {
         AppUser foundAppUser = appUserRepository.findByEmail(email);
-        foundAppUser.setProfilePicture(pictureService.getPicture(new Picture(0,foundAppUser)));
+        if (foundAppUser != null)
+            foundAppUser.setProfilePicture(pictureService.getPicture(new Picture(0,foundAppUser)));
         return foundAppUser;
     }
 
     @Override
     public AppUser findUserById(int id) {
         AppUser foundAppUser = appUserRepository.findById(id);
-        foundAppUser.setProfilePicture(pictureService.getPicture(new Picture(0,foundAppUser)));
+        if (foundAppUser != null)
+            foundAppUser.setProfilePicture(pictureService.getPicture(new Picture(0,foundAppUser)));
         return foundAppUser;
     }
 
