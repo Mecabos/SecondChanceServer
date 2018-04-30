@@ -40,6 +40,16 @@ public class PictureController {
             requestResult.errors = "File empty !";
             return requestResult;
         }
+        try{
+            FileUtil.saveFileToCloud(uploadfile, imageName);
+        }catch (Exception e){
+            requestResult.success = false;
+            requestResult.errors = "Problem while uploading file to cloud";
+            DebugUtil.logError(e.getMessage());
+            return requestResult;
+        }
+
+        /*
         try {
             FileUtil.saveFiles(Arrays.asList(uploadfile), Arrays.asList(imageName));
         } catch (IOException e) {
@@ -47,7 +57,7 @@ public class PictureController {
             requestResult.errors = "Problem while converting file";
             DebugUtil.logError(e.getMessage());
             return requestResult;
-        }
+        }*/
         Picture newPicture = new Picture();
         newPicture.setAppUser(appUserService.findUserById(id));
         if (newPicture.getAppUser() == null) {
@@ -91,6 +101,11 @@ public class PictureController {
     @RequestMapping(method = RequestMethod.POST, value = "/user/picture/getPictureList/{id}")
     public List<Picture> getPictureList(@PathVariable int id) throws NotFoundException {
         AppUser appUser = appUserService.findUserById(id);
+        try {
+            DebugUtil.logError(FileUtil.getFileUrlFromCloud("test"));
+        }catch (Exception e){
+            DebugUtil.logError(e.getMessage());
+        }
         if (appUser != null) {
             return pictureService.getPictureList(new Picture(1,appUser));
         } else {
@@ -98,6 +113,8 @@ public class PictureController {
             error += "AppUser of Id : " + id + " Not found ! ";
            throw new NotFoundException(error);
         }
+
+
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/user/picture/delete/{position}/{id}")
