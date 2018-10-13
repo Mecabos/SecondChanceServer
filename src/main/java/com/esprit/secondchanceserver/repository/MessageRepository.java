@@ -2,11 +2,9 @@ package com.esprit.secondchanceserver.repository;
 
 import com.esprit.secondchanceserver.model.AppUser;
 import com.esprit.secondchanceserver.model.Message;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MessageRepository extends CrudRepository<Message, Integer> {
