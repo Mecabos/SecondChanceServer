@@ -6,10 +6,7 @@ import com.esprit.secondchanceserver.model.Message;
 import com.esprit.secondchanceserver.service.AppUserService;
 import com.esprit.secondchanceserver.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +19,7 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/message/saveNewMessage")
     public String saveNewMessage(@RequestBody Message newMessage) throws NotFoundException {
         AppUser sourceUser = appUserService.findUserById(newMessage.getSourceUser().getId());
@@ -39,6 +37,7 @@ public class MessageController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/message/markMessageAsSeen")
     public String markMessageAsSeen(@RequestBody Message seenMessage) throws NotFoundException {
         Message messageToMarkAsSeen = messageService.findMessageById(seenMessage.getId());
@@ -50,6 +49,7 @@ public class MessageController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/message/markMessageListAsSeen")
     public String markMessageListAsSeen(@RequestBody Message messageToGetSourceAndTargetFrom) throws NotFoundException {
         AppUser sourceUser = appUserService.findUserById(messageToGetSourceAndTargetFrom.getSourceUser().getId());
@@ -67,6 +67,7 @@ public class MessageController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/message/getMessageList")
     public List<Message> getMessageList(@RequestBody Message messageToGetSourceAndTargetFrom) throws NotFoundException {
         AppUser sourceUser = appUserService.findUserById(messageToGetSourceAndTargetFrom.getSourceUser().getId());

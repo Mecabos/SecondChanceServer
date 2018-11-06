@@ -25,6 +25,7 @@ public class AppUserController {
     @Autowired
     private FilterService filterService;
 
+    @CrossOrigin
     @RequestMapping(value="/user/register", method = RequestMethod.POST)
     public AppUser register(@RequestBody AppUser appUser) throws AlreadyExistsException, BadParametersException {
         if (appUser.getEmail().equals(""))
@@ -36,6 +37,7 @@ public class AppUserController {
         return appUserService.saveUser(appUser);
     }
 
+    @CrossOrigin
     @RequestMapping(value="/user/login", method = RequestMethod.POST)
     public AppUser loginUser(@RequestBody AppUser appUser) throws NotFoundException {
         AppUser loggedAppUser = appUserService.login(appUser);
@@ -46,8 +48,7 @@ public class AppUserController {
             throw new NotFoundException("Wrong email or password");
     }
 
-
-
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/appUser/getUser")
     public AppUser getUser (@RequestBody AppUser appUser) throws NotFoundException{
         AppUser appUserToGet = appUserService.findUserById(appUser.getId());
@@ -58,6 +59,7 @@ public class AppUserController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/appUser/getFilter")
     public Filter getFilter (@RequestBody AppUser appUser) throws NotFoundException{
         AppUser appUserToGet = appUserService.findUserById(appUser.getId());
@@ -68,6 +70,7 @@ public class AppUserController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/appUser/updateProfile")
     public String updateInfo (@RequestBody AppUser appUser) throws NotFoundException{
         AppUser appUserToUpdate = appUserService.findUserById(appUser.getId());
@@ -79,6 +82,7 @@ public class AppUserController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/appUser/updateFilter")
     public String updateFilter (@RequestBody Filter filter) throws NotFoundException{
         AppUser appUserToUpdate = appUserService.findUserById(filter.getAppUser().getId());

@@ -7,10 +7,7 @@ import com.esprit.secondchanceserver.model.LikeMatch;
 import com.esprit.secondchanceserver.service.AppUserService;
 import com.esprit.secondchanceserver.service.LikeMatchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +20,7 @@ public class LikeMatchController {
     @Autowired
     private AppUserService appUserService;
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/likeMatch/getMatchedAppUserListFor")
     public List<AppUser> getMatchedAppUserListFor (@RequestBody AppUser appUser) throws NotFoundException {
         AppUser appUserToWhomToSearchMatchedList = appUserService.findUserById(appUser.getId());
@@ -33,6 +31,7 @@ public class LikeMatchController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/likeMatch/delete")
     public String deleteLikeMatch (@RequestBody LikeMatch likeMatchToDelete) throws NotFoundException {
         AppUser sourceUser = appUserService.findUserById(likeMatchToDelete.getSourceUser().getId());
@@ -50,6 +49,7 @@ public class LikeMatchController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/likeMatch/getLikeMatchResumeList")
     public List<LikeMatchResume> getLikeMatchListResume (@RequestBody AppUser appUser) throws NotFoundException {
         AppUser appUserToWhomToSearchMatchedResumeList = appUserService.findUserById(appUser.getId());

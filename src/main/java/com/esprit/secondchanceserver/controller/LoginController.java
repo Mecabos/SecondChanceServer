@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +28,7 @@ public class LoginController {
     private AppUserService appUserService;
 
 
+    @CrossOrigin
     @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView();
@@ -34,7 +36,7 @@ public class LoginController {
         return modelAndView;
     }
 
-
+    @CrossOrigin
     @RequestMapping(value="/registration", method = RequestMethod.GET)
     public ModelAndView registration(){
         ModelAndView modelAndView = new ModelAndView();
@@ -44,6 +46,7 @@ public class LoginController {
         return modelAndView;
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public ModelAndView createNewUser(@Valid AppUser appUser, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
@@ -65,6 +68,7 @@ public class LoginController {
         return modelAndView;
     }
 
+    @CrossOrigin
     @RequestMapping(value="/user/home", method = RequestMethod.GET)
     public ModelAndView UserHome(){
         ModelAndView modelAndView = new ModelAndView();
@@ -76,6 +80,7 @@ public class LoginController {
         return modelAndView;
     }
 
+    @CrossOrigin
     @RequestMapping(value="/admin/home", method = RequestMethod.GET)
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();

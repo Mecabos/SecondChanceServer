@@ -8,10 +8,7 @@ import com.esprit.secondchanceserver.service.AppUserService;
 import com.esprit.secondchanceserver.service.FilterService;
 import com.esprit.secondchanceserver.service.NotationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +24,7 @@ public class NotationController {
     @Autowired
     private NotationService notationService;
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/notation/getNotation")
     public Notation getNotation(@RequestBody Notation notation) throws NotFoundException {
         Notation notationToGet = notationService.findNotationById(notation.getId());
@@ -37,6 +35,7 @@ public class NotationController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/notation/getFilteredUsers")
     public List<AppUser> getFilteredUsers(@RequestBody AppUser appUser) throws NotFoundException {
         AppUser appUserForWhomToFilter = appUserService.findUserById(appUser.getId());
@@ -47,6 +46,7 @@ public class NotationController {
         }
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/notation/saveNewNotation")
     public String saveNewNotation(@RequestBody Notation notation) throws NotFoundException {
         AppUser sourceUser = appUserService.findUserById(notation.getSourceUser().getId());

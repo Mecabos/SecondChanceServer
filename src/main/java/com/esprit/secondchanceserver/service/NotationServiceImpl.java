@@ -43,7 +43,6 @@ public class NotationServiceImpl implements NotationService {
             } else {
                 //CREATE NOTIFICATION FOR SUPER NOTATION
             }
-
         }
 
 

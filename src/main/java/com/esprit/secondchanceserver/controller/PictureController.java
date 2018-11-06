@@ -27,6 +27,7 @@ public class PictureController {
     @Autowired
     private PictureService pictureService;
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/picture/upload/{position}/{id}")
     public RequestResult uploadFile(@RequestParam("file") MultipartFile uploadfile, @PathVariable int position, @PathVariable int id) {
         LocalDateTime currentDate = DateUtil.getCurrentDateTime();
@@ -98,6 +99,7 @@ public class PictureController {
         return requestResult;
     }*/
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/picture/getPictureList/{id}")
     public List<Picture> getPictureList(@PathVariable int id) throws NotFoundException {
         AppUser appUser = appUserService.findUserById(id);
@@ -113,10 +115,9 @@ public class PictureController {
             error += "AppUser of Id : " + id + " Not found ! ";
            throw new NotFoundException(error);
         }
-
-
     }
 
+    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, value = "/user/picture/delete/{position}/{id}")
     public RequestResult deletePicture(@PathVariable int position, @PathVariable int id) throws NotFoundException {
         RequestResult requestResult = new RequestResult();
