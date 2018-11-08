@@ -1,5 +1,8 @@
 package com.esprit.secondchanceserver.Util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -23,8 +26,8 @@ public class FileUtil {
                     "EndpointSuffix=core.windows.net";
     public static final String SAP_TOKEN = "?sv=2017-07-29&ss=f&srt=sco&sp=r&se=2018-09-01T02:05:44Z&st=2018-04-30T18:05:44Z&spr=https&sig=fXPoy4hXL43MSBz5zGXEmPzqV9vyAiVS7beL6GsPzCA%3D";
 
-    public static String UPLOAD_FOLDER = "E://SecondChance//Upload-dir//";
-    public static String DOWNLOAD_URL = "/SecondChance/Upload-dir/";
+    /*public static String UPLOAD_FOLDER = "E://SecondChance//Upload-dir//";
+    public static String DOWNLOAD_URL = "/SecondChance/Upload-dir/";*/
 
     public static void saveFileToCloud(MultipartFile file, String fileName) throws URISyntaxException, StorageException, IOException {
         try {
@@ -73,30 +76,9 @@ public class FileUtil {
         return file.deleteIfExists();
     }
 
-    public static void saveFiles(List<MultipartFile> files, List<String> fileNames) throws IOException {
-        int i = 0;
-        for (MultipartFile file : files) {
-            if (file.isEmpty()) {
-                continue;
-            }
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_FOLDER + fileNames.get(i));
-            DebugUtil.logError("saving to" + " : " + path);
-            Files.write(path, bytes);
-            i++;
-        }
-    }
-
-    public static void deleteFile(String fileName) {
-        try {
-            File file = new File(UPLOAD_FOLDER + fileName);
-            file.delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static String getFileExtension(String fileName) {
         return "." + fileName.substring(fileName.lastIndexOf(".") + 1);
     }
+
+
 }
