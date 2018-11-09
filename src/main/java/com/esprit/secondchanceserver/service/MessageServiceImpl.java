@@ -1,6 +1,7 @@
 package com.esprit.secondchanceserver.service;
 
 import com.esprit.secondchanceserver.Util.DateUtil;
+import com.esprit.secondchanceserver.enumeration.DurationType;
 import com.esprit.secondchanceserver.model.AppUser;
 import com.esprit.secondchanceserver.model.Message;
 import com.esprit.secondchanceserver.repository.MessageRepository;
@@ -35,6 +36,27 @@ public class MessageServiceImpl implements MessageService {
             } else {
                 currentMessage.setSender(false);
             }
+
+            int timeSinceMessageSent = (int)DateUtil.getDurationBetween(currentMessage.getSendingDate(), DateUtil.getCurrentDateTime(), DurationType.Minutes);
+            String text = "";
+            if (timeSinceMessageSent <= 0){
+                text = " < 1 min";
+            }else if(timeSinceMessageSent > 0 && timeSinceMessageSent < 60){
+                text = timeSinceMessageSent +" min";
+            }else if (timeSinceMessageSent >= 60 &&  timeSinceMessageSent < 1440) {
+                if (timeSinceMessageSent/60 == 1){
+                    text = " 1 hour" ;
+                }else{
+                    text = (timeSinceMessageSent/60) + " hours" ;
+                }
+            }else{
+                if (timeSinceMessageSent/ 1140 == 1){
+                    text = "1 day";
+                }else{
+                    text = (timeSinceMessageSent/ 1140) + " days";
+                }
+            }
+            currentMessage.setTimeSinceSent(text);
         }
         return messageList;
     }

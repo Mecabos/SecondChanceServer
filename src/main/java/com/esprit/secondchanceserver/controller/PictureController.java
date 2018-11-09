@@ -113,6 +113,7 @@ public class PictureController {
         return requestResult;
     }
 
+    @CrossOrigin
     @GetMapping("/user/picture/{filename}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String filename) {
         Resource file = pictureService.loadFile(filename);

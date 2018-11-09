@@ -40,9 +40,11 @@ public class AppUserServiceImpl implements AppUserService {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             if (passwordEncoder.matches(appUser.getPassword(), foundAppUser.getPassword())){
                 foundAppUser.setProfilePicture(pictureService.getPicture(new Picture(0,foundAppUser)));
+                if (foundAppUser.getBanCount() >= 2){
+                    return  null;
+                }
                 return foundAppUser;
             }
-
         }
         return null;
     }
@@ -139,5 +141,12 @@ public class AppUserServiceImpl implements AppUserService {
 
         appUserRepository.save(appUserToUpdate);
     }
+
+    @Override
+    public void incrementBanCount(AppUser user) {
+        user.setBanCount(user.getBanCount()+1);
+        appUserRepository.save(user);
+    }
+
 
 }

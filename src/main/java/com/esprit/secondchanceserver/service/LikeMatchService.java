@@ -13,5 +13,6 @@ public interface LikeMatchService {
     List<LikeMatch> getLikeMatchListBySourceUser(AppUser sourceAppUser);
     List<AppUser> getMatchedAppUserListFor (AppUser sourceAppUser);
     void deleteLikeMatch (AppUser sourceAppUser, AppUser targetAppUser);
+    void banLikeMatch (AppUser sourceAppUser, AppUser targetAppUser);
     List<LikeMatchResume> getMatchResume (AppUser sourceAppUser);
 }

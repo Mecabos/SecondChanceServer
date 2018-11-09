@@ -3,6 +3,7 @@ package com.esprit.secondchanceserver.service;
 import com.esprit.secondchanceserver.Util.DateUtil;
 import com.esprit.secondchanceserver.Util.DebugUtil;
 import com.esprit.secondchanceserver.custom.LikeMatchResume;
+import com.esprit.secondchanceserver.enumeration.DurationType;
 import com.esprit.secondchanceserver.model.*;
 import com.esprit.secondchanceserver.repository.LikeMatchRepository;
 import com.esprit.secondchanceserver.repository.MessageRepository;
@@ -24,6 +25,9 @@ public class LikeMatchServiceImpl implements LikeMatchService {
 
     @Autowired
     private PictureService pictureService;
+
+    @Autowired
+    private AppUserService appUserService;
 
     @Override
     public void saveLikeMatch(AppUser sourceAppUser, AppUser targetAppUser) {
@@ -58,6 +62,15 @@ public class LikeMatchServiceImpl implements LikeMatchService {
     }
 
     @Override
+    public void banLikeMatch(AppUser sourceAppUser, AppUser targetAppUser) {
+        LikeMatch likeMatchToDelete = likeMatchRepository.findBySourceUserAndTargetUser(sourceAppUser,targetAppUser);
+        likeMatchRepository.delete(likeMatchToDelete);
+        LikeMatch reverseLikeMatchToDelete = likeMatchRepository.findBySourceUserAndTargetUser(targetAppUser,sourceAppUser);
+        likeMatchRepository.delete(reverseLikeMatchToDelete);
+        appUserService.incrementBanCount(targetAppUser);
+    }
+
+    @Override
     public List<LikeMatchResume> getMatchResume(AppUser sourceAppUser) {
         List<AppUser> matchedUsers = getMatchedAppUserListFor(sourceAppUser);
         List<LikeMatchResume> likeMatchResumeList = new ArrayList<>();
@@ -71,8 +84,27 @@ public class LikeMatchServiceImpl implements LikeMatchService {
             if (lastMessage != null){
                 newResume.setLastMessage(lastMessage.getText());
                 newResume.setLastMessageSender(lastMessage.getSourceUser() == sourceAppUser);
-            }
+                int timeSinceLastMessage = (int)DateUtil.getDurationBetween(lastMessage.getSendingDate(), DateUtil.getCurrentDateTime(), DurationType.Minutes);
+                String text = "";
+                if (timeSinceLastMessage <= 0){
+                    text = " < 1 min";
+                }else if(timeSinceLastMessage > 0 && timeSinceLastMessage < 60){
+                    text = timeSinceLastMessage +" min";
+                }else if (timeSinceLastMessage >= 60 &&  timeSinceLastMessage < 1440) {
+                    if (timeSinceLastMessage/60 == 1){
+                        text = " 1 hour" ;
+                    }else{
+                        text = (timeSinceLastMessage/60) + " hours" ;
+                    }
+                }else{
+                    text = " > 1 day";
+                }
+                newResume.setTimeSinceLastMessage(text);
 
+                if (lastMessage.getSourceUser().getId() == sourceAppUser.getId()){
+                    newResume.setNbrUnseenMessages(messageRepository.countBySourceUserAndTargetUserAndIsSeenIsFalse(sourceAppUser,matchedAppUser));
+                }
+            }
             likeMatchResumeList.add(newResume);
         }
         return likeMatchResumeList ;

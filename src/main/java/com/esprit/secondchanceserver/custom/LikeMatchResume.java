@@ -7,6 +7,7 @@ public class LikeMatchResume {
     private int id ;
     private String name;
     private String lastMessage;
+    private String timeSinceLastMessage;
     private boolean lastMessageSender = false;
     private int nbrUnseenMessages;
     private Picture profilePicture;
@@ -28,6 +29,14 @@ public class LikeMatchResume {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getTimeSinceLastMessage() {
+        return timeSinceLastMessage;
+    }
+
+    public void setTimeSinceLastMessage(String timeSinceLastMessage) {
+        this.timeSinceLastMessage = timeSinceLastMessage;
     }
 
     public String getLastMessage() {

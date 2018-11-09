@@ -13,4 +13,5 @@ public interface AppUserService {
     List<AppUser> findUsersFor(int active, GenderType gender, int ageMin, int ageMax, int childrenNumberMin, int childrenNumberMax, List<StatusType> statusList, String country, int id);
     AppUser saveUser(AppUser user);
     void updateInfo(AppUser user);
+    void incrementBanCount(AppUser user);
 }

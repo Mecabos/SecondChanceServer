@@ -27,6 +27,9 @@ public class Message {
     @Transient
     private boolean isSender ;
 
+    @Transient
+    private String timeSinceSent ;
+
     public Message() {
     }
 
@@ -99,5 +102,13 @@ public class Message {
 
     public void setSender(boolean sender) {
         isSender = sender;
+    }
+
+    public String getTimeSinceSent() {
+        return timeSinceSent;
+    }
+
+    public void setTimeSinceSent(String timeSinceSent) {
+        this.timeSinceSent = timeSinceSent;
     }
 }

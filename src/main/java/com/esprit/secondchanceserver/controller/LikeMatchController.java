@@ -60,4 +60,22 @@ public class LikeMatchController {
         }
     }
 
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.POST, value = "/user/likeMatch/ban")
+    public String banLikeMatch (@RequestBody LikeMatch likeMatchToDelete) throws NotFoundException {
+        AppUser sourceUser = appUserService.findUserById(likeMatchToDelete.getSourceUser().getId());
+        AppUser targetUser = appUserService.findUserById(likeMatchToDelete.getTargetUser().getId());
+        if (sourceUser != null && targetUser != null) {
+            likeMatchService.banLikeMatch(sourceUser,targetUser);
+            return "User " + sourceUser.getName() + " Banned " + targetUser.getName();
+        } else {
+            String error = "";
+            if (sourceUser == null)
+                error += "AppUser of Id : " + likeMatchToDelete.getSourceUser().getId() + " Not found ! ";
+            if (targetUser == null)
+                error += "AppUser of Id : " + likeMatchToDelete.getTargetUser().getId() + " Not found ! ";
+            throw new NotFoundException(error);
+        }
+    }
+
 }

@@ -49,6 +49,7 @@ public class AppUser {
     private String country = "";
     private String town = "";
     private boolean livesAlone = true;
+    private int banCount = 0;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "appUser_role", joinColumns = @JoinColumn(name = "appUser_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
@@ -71,7 +72,7 @@ public class AppUser {
     public AppUser() {
     }
 
-    public AppUser(@Email(message = "*Please provide a valid Email") @NotEmpty(message = "*Please provide an email") String email, @Length(min = 5, message = "*Your password must have at least 5 characters") @NotEmpty(message = "*Please provide your password") String password, @NotEmpty(message = "*Please provide your name") String name, @NotEmpty(message = "*Please provide your last name") String lastName, int active, String description, String university, String profession, int numberOfChildren, int age, GenderType gender, StatusType status, String country, String town, boolean livesAlone, Set<Role> roles, List<LikeMatch> likeMatches, List<Notation> createdNotations, List<Notation> receivedNotations, List<Message> sentMessages, List<Message> receivedMessages, List<Picture> pictures) {
+    public AppUser(@Email(message = "*Please provide a valid Email") @NotEmpty(message = "*Please provide an email") String email, @Length(min = 5, message = "*Your password must have at least 5 characters") @NotEmpty(message = "*Please provide your password") String password, @NotEmpty(message = "*Please provide your name") String name, @NotEmpty(message = "*Please provide your last name") String lastName, int active, String description, String university, String profession, int numberOfChildren, int age, GenderType gender, StatusType status, String country, String town, boolean livesAlone, Set<Role> roles, List<LikeMatch> likeMatches, List<Notation> createdNotations, List<Notation> receivedNotations, List<Message> sentMessages, List<Message> receivedMessages, List<Picture> pictures,int banCount) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -88,6 +89,7 @@ public class AppUser {
         this.town = town;
         this.livesAlone = livesAlone;
         this.roles = roles;
+        this.banCount = banCount;
         /*this.likeMatches = likeMatches;*/
         /*this.createdNotations = createdNotations;
         this.receivedNotations = receivedNotations;*/
@@ -152,6 +154,13 @@ public class AppUser {
         this.roles = roles;
     }
 
+    public int getBanCount() {
+        return banCount;
+    }
+
+    public void setBanCount(int banCount) {
+        this.banCount = banCount;
+    }
     /*public List<LikeMatch> getMatches() {
         return likeMatches;
     }

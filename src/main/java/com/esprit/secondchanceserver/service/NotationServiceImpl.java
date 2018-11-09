@@ -35,7 +35,7 @@ public class NotationServiceImpl implements NotationService {
                 newNotation.getSourceUser());
 
         if (newNotation.getValue() > 0) {
-            if (newNotation.getValue() == 1) {
+            if (newNotation.getValue() == 1 || newNotation.getValue() == 2) {
                 if (reverseNotation != null) {
                     if (reverseNotation.getValue() > 0)
                         likeMatchService.saveLikeMatch(newNotation.getSourceUser(), newNotation.getTargetUser());
