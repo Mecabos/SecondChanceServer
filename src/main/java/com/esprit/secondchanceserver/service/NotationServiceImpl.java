@@ -8,48 +8,68 @@ import com.esprit.secondchanceserver.repository.NotationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+package com.esprit.secondchanceserver.service;
+
+import com.esprit.secondchanceserver.Util.DateUtil;
+import com.esprit.secondchanceserver.model.AppUser;
+import com.esprit.secondchanceserver.model.Notation;
+import com.esprit.secondchanceserver.repository.NotationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-@Service("notationService")
-public class NotationServiceImpl implements NotationService {
+@Service
+public class NotationService {
+
+    private static final int LIKE_MATCH_VALUE = 1;
+    private static final int SUPER_NOTATION_VALUE = 3;
 
     @Autowired
-    private NotationRepository notationRepository;
+    private NotationRepository notationRepo;
 
     @Autowired
-    private LikeMatchService likeMatchService;
+    private LikeMatchService likeMatchSvc;
 
 
-    @Override
     public Notation findNotationById(int id) {
-        return notationRepository.findById(id);
+        if (notationRepo != null) {
+            return notationRepo.findById(id);
+        }
+        return null;
     }
 
-    @Override
     public void saveNotation(Notation newNotation) {
-        newNotation.setNotationDate(DateUtil.getCurrentDateTime());
-        notationRepository.save(newNotation);
+        if (notationRepo != null) {
+            newNotation.setNotationDate(DateUtil.getCurrentDateTime());
+            notationRepo.save(newNotation);
 
-        Notation reverseNotation = notationRepository.findBySourceUserAndTargetUser(
-                newNotation.getTargetUser(),
-                newNotation.getSourceUser());
+            Notation reverseNotation = notationRepo.findBySourceUserAndTargetUser(
+                    newNotation.getTargetUser(),
+                    newNotation.getSourceUser());
 
+            saveLikeMatchIfNecessary(newNotation, reverseNotation);
+        }
+    }
+
+    public List<Notation> getNotationListBySourceUser(AppUser sourceUser) {
+        if (notationRepo != null) {
+            return notationRepo.findAllBySourceUser(sourceUser);
+        }
+        return null;
+    }
+
+    private void saveLikeMatchIfNecessary(Notation newNotation, Notation reverseNotation) {
         if (newNotation.getValue() > 0) {
-            if (newNotation.getValue() == 1 || newNotation.getValue() == 2) {
+            if (newNotation.getValue() == LIKE_MATCH_VALUE || newNotation.getValue() == LIKE_MATCH_VALUE + 1) {
                 if (reverseNotation != null) {
-                    if (reverseNotation.getValue() > 0)
-                        likeMatchService.saveLikeMatch(newNotation.getSourceUser(), newNotation.getTargetUser());
+                    if (reverseNotation.getValue() > 0) {
+                        likeMatchSvc.saveLikeMatch(newNotation.getSourceUser(), newNotation.getTargetUser());
+                    }
                 }
-            } else {
-                //CREATE NOTIFICATION FOR SUPER NOTATION
+            } else if (newNotation.getValue() == SUPER_NOTATION_VALUE) {
+                // CREATE NOTIFICATION FOR SUPER NOTATION
             }
         }
-
-
-    }
-
-    @Override
-    public List<Notation> getNotationListBySourceUser(AppUser sourceUser) {
-        return notationRepository.findAllBySourceUser(sourceUser);
     }
 }
